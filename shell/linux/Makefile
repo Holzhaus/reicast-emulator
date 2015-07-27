@@ -23,6 +23,7 @@ ifeq (,$(ARCH))
     ARCH = $(shell uname -m)
 endif
 
+$(info Building arch: $(ARCH))
 ifeq ($(ARCH), $(filter $(ARCH), i386 i686))
     X86_REC := 1
     MFLAGS += -m32
