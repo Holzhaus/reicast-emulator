@@ -15,6 +15,7 @@
 #include "ppapi/utility/completion_callback_factory.h"
 
 #include "types.h"
+#include "nullDC.h"
 
 #include <GLES2/gl2.h>
 
@@ -50,7 +51,11 @@ void* emuthread(void* ) {
   
   SetHomeDir("/http");
 
-  dc_init(1,Args);
+  settings_t dc_settings;
+  dc_get_settings(&dc_settings, 1, Args)
+
+  dc_init(dc_settings);
+
   dc_run();
 
   return 0;

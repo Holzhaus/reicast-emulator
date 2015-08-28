@@ -8,6 +8,7 @@
 #import <Carbon/Carbon.h>
 
 #include "types.h"
+#include "nullDC.h"
 #include <sys/stat.h>
 
 #include <OpenGL/gl3.h>
@@ -84,12 +85,8 @@ void gl_swap() {
     
 }
 
-int dc_init(int argc,wchar* argv[]);
-void dc_run();
-
 bool has_init = false;
 void* emuthread(void*) {
-    settings.profile.run_counts=0;
     string home = (string)getenv("HOME");
     if(home.c_str())
     {
@@ -101,7 +98,11 @@ void* emuthread(void*) {
         SetHomeDir(".");
     char* argv[] = { "reicast" };
     
-    dc_init(1,argv);
+    settings_t dc_settings;
+    dc_get_settings(&dc_settings, 1, argv)
+    dc_settings.profile.run_counts=0;
+    
+    dc_init(dc_settings);
     
     has_init = true;
     

@@ -21,6 +21,7 @@
 #include <execinfo.h>
 
 #include "hw/mem/_vmem.h"
+#include "nullDC.h"
 	
 #ifdef TARGET_PANDORA
 #define WINDOW_WIDTH	800
@@ -64,8 +65,6 @@ s8 joyx[4],joyy[4];
 u8 rt[4],lt[4];
 
 extern bool KillTex;
-
-extern void dc_term();
 
 enum DCPad {
 	Btn_C		= 1,
@@ -405,8 +404,6 @@ void os_CreateWindow()
 
 
 void common_linux_setup();
-int dc_init(int argc,wchar* argv[]);
-void dc_run();
 
 void gl_term();
 
@@ -449,9 +446,11 @@ int main(int argc, wchar* argv[])
 
 	printf("common linux setup done\n");
 	
-	settings.profile.run_counts=0;
-		
-	dc_init(argc,argv);
+	settings_t dc_settings;
+	dc_get_settings(&dc_settings, argc,argv)
+	dc_settings.profile.run_counts=0;
+
+	dc_init(dc_settings);
 
 	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK|SDL_INIT_NOPARACHUTE)==-1)
 	die("error initializing SDL");

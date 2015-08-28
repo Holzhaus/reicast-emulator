@@ -1,6 +1,7 @@
 #include "oslib\oslib.h"
 #include "oslib\audiostream.h"
 #include "imgread\common.h"
+#include "nullDC.h"
 
 #define _WIN32_WINNT 0x0500 
 #include <windows.h>
@@ -623,10 +624,10 @@ int CALLBACK WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	//SetUnhandledExceptionFilter(&ExeptionHandler);
 	__try
 	{
-		int dc_init(int argc,wchar* argv[]);
-		void dc_run();
-		void dc_term();
-		dc_init(argc,argv);
+		settings_t dc_settings;
+		dc_get_settings(&dc_settings, argc, argv)
+
+		dc_init(dc_settings);
 
 		#ifdef _WIN64
 				setup_seh();
