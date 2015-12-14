@@ -64,6 +64,11 @@ ifeq (,$(platform))
     else
         $(error Unsupported CPU architecture)
     endif
+
+    FLAGS = $(shell grep flags /proc/cpuinfo)
+    ifneq (,$(findstring sse4_1,$(FLAGS)))
+        platform += sse4_1
+    endif
 endif
 
 $(info Platform: $(platform))
@@ -79,7 +84,7 @@ ifneq (,$(findstring x86,$(platform)))
     CFLAGS += -m32 -D TARGET_LINUX_x86 -D TARGET_NO_AREC -fsingle-precision-constant
     CXXFLAGS += -fno-exceptions
 
-    ifneq (,$(findstring sse4_1,$(shell grep flags /proc/cpuinfo)))
+    ifneq (,$(findstring sse4_1,$(platform)))
 		HAS_SOFTREND := 1
 	endif
 
@@ -91,7 +96,7 @@ else ifneq (,$(findstring x64,$(platform)))
     CFLAGS += -D TARGET_LINUX_x64 -D TARGET_NO_AREC -fsingle-precision-constant
     CXXFLAGS += -fexceptions
 
-    ifneq (,$(findstring sse4_1,$(shell grep flags /proc/cpuinfo)))
+    ifneq (,$(findstring sse4_1,$(platform)))
 		HAS_SOFTREND := 1
 	endif
 
